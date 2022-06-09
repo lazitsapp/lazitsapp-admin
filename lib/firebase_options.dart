@@ -16,9 +16,33 @@ import 'package:flutter/foundation.dart'
 /// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
+
+
+
+/*    const bool USE_LOCAL_FIREBASE = bool.fromEnvironment('USE_LOCAL_FIREBASE');
+    if (USE_LOCAL_FIREBASE) {
+      return FirebaseOptions(
+        // apiKey: 'AIzaSyB6072DH2fyb9Jqn1VBmx8IxLDOguiQTe8',
+        // appId: '1:880029952543:web:eb04ebd667cda2be11c32a',
+        // messagingSenderId: '880029952543',
+        projectId: 'lazitsapp-8c7fb',
+        // authDomain: 'lazitsapp-8c7fb.firebaseapp.com',
+        // databaseURL: 'https://lazitsapp-8c7fb.firebaseio.com',
+        // storageBucket: 'lazitsapp-8c7fb.appspot.com',
+        // measurementId: 'G-SMNFZ3HZTW',
+      );
+      firebaseFirestoreInstance.settings = const Settings(
+        host: 'localhost:8080',
+        sslEnabled: false,
+        persistenceEnabled: false,
+      );
+    }*/
+
+
     if (kIsWeb) {
       return web;
     }
+
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         throw UnsupportedError(
@@ -51,6 +75,9 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+
+
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyB6072DH2fyb9Jqn1VBmx8IxLDOguiQTe8',

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+class DefaultAppDrawer extends StatelessWidget {
+  const DefaultAppDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +18,24 @@ class AppDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text('Drawer Header'),
+            child: Text('Lazíts! Admin'),
           ),
           ListTile(
-            title: const Text('Item 1'),
+            title: const Text('Authors'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              GoRouter.of(context).go('/authors');
             },
           ),
           ListTile(
-            title: const Text('Item 2'),
+            title: const Text('Categories'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              GoRouter.of(context).go('/categories');
+            },
+          ),
+          ListTile(
+            title: const Text('Users'),
+            onTap: () {
+              GoRouter.of(context).go('/Users');
             },
           ),
         ],

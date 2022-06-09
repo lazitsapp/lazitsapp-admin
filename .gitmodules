@@ -1,0 +1,3 @@
+[submodule "lazitsapp-packages"]
+	path = lazitsapp-packages
+	url = git@github.com:lazitsapp/lazitsapp-packages.git
