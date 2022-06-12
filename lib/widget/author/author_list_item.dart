@@ -16,7 +16,7 @@ class AuthorListItem extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          GoRouter.of(context).go('/authors/edit/${author.authorId}');
+          GoRouter.of(context).go('/authors/update/${author.authorId}');
         },
         child: Column(
           children: [

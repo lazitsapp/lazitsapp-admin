@@ -28,7 +28,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required authenticationRepository,
     required profileRepository,
-    required analyticsService,
   }) :
     _authenticationRepository = authenticationRepository,
     _profileRepository = profileRepository,
@@ -105,9 +104,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       isSigningIn = false;
       emit(state.copyWith(
-          user: signinResult.user,
-          authStatus: AuthStatus.signedIn
+        user: signinResult.user,
+        authStatus: AuthStatus.signedIn
       ));
+
+      if (event.onLoginSuccessful != null) {
+        event.onLoginSuccessful!();
+      }
 
     } catch (error) {
 

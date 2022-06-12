@@ -61,7 +61,31 @@ class AppRouter {
         path: AppPage.login.toPath,
         name: AppPage.login.toName,
         builder: (context, state) => const LoginPage(),
-      )
+      ),
+
+      GoRoute(
+        path: AppPage.authors.toPath,
+        name: AppPage.authors.toName,
+        builder: (context, state) => const AuthorListPage(),
+        routes: [
+          GoRoute(
+            path: AppPage.authorUpdate.toPath,
+            name: AppPage.authorUpdate.toName,
+            builder: (context, state) {
+              final String authorId
+                = state.params['authorId']!;
+              return AuthorUpdatePage(authorId);
+            }
+          ),
+          // GoRoute(
+          //   path: AppPage.authorCreate.toPath,
+          //   name: AppPage.authorCreate.toName,
+          //   builder: (context, state) {
+          //
+          //   }
+          // )
+        ]
+      ),
 
 
     ],

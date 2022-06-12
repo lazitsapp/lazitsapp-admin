@@ -19,13 +19,18 @@ class SigninWithEmailAndPassword extends AuthEvent {
 
   final String email;
   final String password;
+  final Function? onLoginSuccessful;
 
   const SigninWithEmailAndPassword(
-    this.email, this.password,
+    this.email, this.password, this.onLoginSuccessful
   );
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [
+    email,
+    password,
+    onLoginSuccessful
+  ];
 
 }
 

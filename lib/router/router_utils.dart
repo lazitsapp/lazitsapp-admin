@@ -32,9 +32,9 @@ extension AppPageExtension on AppPage {
       case AppPage.authors:
         return "/authors";
       case AppPage.authorCreate:
-        return "/authors";
+        return "update/:authorId";
       case AppPage.authorUpdate:
-        return "/authors";
+        return "create";
 
       default:
         return "/";
@@ -49,6 +49,12 @@ extension AppPageExtension on AppPage {
         return "LOGIN";
       case AppPage.error:
         return "ERROR";
+      case AppPage.authors:
+        return "AUTHORS_LIST";
+      case AppPage.authorUpdate:
+        return "AUTHOR_UPDATE";
+      case AppPage.authorCreate:
+        return "AUTHOR_CREATE";
 
       default:
         return "HOME";

@@ -8,7 +8,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const DefaultAppScaffolding(
-      body: LoginForm()
+      drawer: null,
+      body: Center(child: LoginForm())
     );
   }
 

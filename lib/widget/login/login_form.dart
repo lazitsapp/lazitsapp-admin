@@ -3,7 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lazitsapp_admin/bloc/auth/auth_bloc.dart';
+import 'package:lazitsapp_admin/router/router_utils.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -23,15 +25,17 @@ class _LoginFormState extends State<LoginForm> {
     return ConstrainedBox(
       constraints: const BoxConstraints.tightFor(width: 521),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-
+          Text('Login', style: Theme.of(context).textTheme.headlineSmall),
           FormBuilder(
             key: _formKey,
             // enabled: false,
-            onChanged: () {
-              _formKey.currentState!.save();
-              debugPrint(_formKey.currentState!.value.toString());
-            },
+            // onChanged: () {
+            //   _formKey.currentState!.save();
+            //   debugPrint(_formKey.currentState!.value.toString());
+            // },
             autovalidateMode: AutovalidateMode.disabled,
             // initialValue: const {
             //   'movie_rating': 5,
@@ -57,8 +61,7 @@ class _LoginFormState extends State<LoginForm> {
                   // valueTransformer: (text) => num.tryParse(text),
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
-                    FormBuilderValidators.numeric(),
-                    FormBuilderValidators.max(70),
+                    FormBuilderValidators.email(),
                   ]),
                   // initialValue: '12',
                   keyboardType: TextInputType.number,
@@ -89,17 +92,27 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
           ),
+          const SizedBox(height: 16),
           Row(
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState?.saveAndValidate() ?? false) {
-                      debugPrint(_formKey.currentState?.value.toString());
 
-                      // BlocProvider.of<AuthBloc>(context).add(
-                      //   SigninWithEmailAndPassword(email, password)
-                      // );
+                      Map<String, dynamic>? values =
+                        _formKey.currentState?.value;
+
+                      String email = values!['email'] as String;
+                      String password = values['password'] as String;
+
+                      BlocProvider.of<AuthBloc>(context).add(
+                        SigninWithEmailAndPassword(
+                          email,
+                          password,
+                          () => GoRouter.of(context).goNamed(AppPage.home.toName)
+                        )
+                      );
 
                     } else {
                       debugPrint(_formKey.currentState?.value.toString());
