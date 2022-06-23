@@ -47,12 +47,12 @@ class UpdateAuthor extends AuthorEvent {
 class UpdateAuthorWithProfileImage extends AuthorEvent {
 
   final Author author;
-  final Uint8List imageBytes;
+  final Uint8List? imageBytes;
 
   const UpdateAuthorWithProfileImage(this.author, this.imageBytes);
 
   @override
-  List<Object> get props => [author, imageBytes];
+  List<Object> get props => [author];
 }
 
 class UpdateAuthorSuccess extends AuthorEvent {

@@ -22,7 +22,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     emit(const CategoriesLoadingState());
 
     List<ArticleCategory> categories = await _categoryRepository
-      .getCategories(isActive: false);
+      .getCategories(isActive: true);
 
     add(LoadCategoriesSuccess(categories));
   }

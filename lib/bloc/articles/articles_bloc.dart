@@ -14,7 +14,7 @@ class ArticlesBloc extends Bloc<ArticlesEvent, ArticlesState> {
     super(const ArticlesInitialState()) {
 
 
-
+      _articleRepository.toString();
 
   }
 

@@ -9,12 +9,12 @@ typedef OnPickImageCallback = void Function(
 
 class ImageFilePicker extends StatefulWidget {
 
-  final String? currentImageUrl;
+  final String? initialValue;
   final Function? onImageFileSelected;
 
   const ImageFilePicker(
     {
-      this.currentImageUrl,
+      this.initialValue,
       this.onImageFileSelected,
       Key? key
     }
@@ -26,47 +26,50 @@ class ImageFilePicker extends StatefulWidget {
 
 class _ImageFilePickerState extends State<ImageFilePicker> {
 
+  late final bool hasInitialValue;
+  bool hasSelectedImage = false;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  String? _fileName;
-  String? _saveAsFileName;
-  List<PlatformFile> _paths = [];
-  String? _directoryPath;
-  String? _extension;
-  bool _isLoading = false;
-  bool _userAborted = false;
-  bool _multiPick = false;
-  FileType _pickingType = FileType.any;
-  TextEditingController _controller = TextEditingController();
+  // String? _fileName;
+  // String? _saveAsFileName;
+  // List<PlatformFile> _paths = [];
+  // String? _directoryPath;
+  // String? _extension;
+  // bool _isLoading = false;
+  // bool _userAborted = false;
+  // bool _multiPick = false;
+  // FileType _pickingType = FileType.any;
+  // TextEditingController _controller = TextEditingController();
 
   PlatformFile? selectedFile;
-  bool isFileSelected = false;
 
   @override
   void initState() {
+    hasInitialValue = widget.initialValue != null;
     super.initState();
-    _controller.addListener(() => _extension = _controller.text);
+    // _controller.addListener(() => _extension = _controller.text);
   }
 
   void _pickFiles() async {
     _resetState();
-    List<PlatformFile>? pickFilesResult;
+    List<PlatformFile>? pickedFiles;
     try {
-      _directoryPath = null;
+      // _directoryPath = null;
 
-      pickFilesResult = (await FilePicker.platform.pickFiles(
-        type: _pickingType,
+      FilePickerResult? pickResult = await FilePicker.platform.pickFiles(
+        type: FileType.image,
         allowMultiple: false,
         withData: true,
-        onFileLoading: (FilePickerStatus status) => print(status),
-        allowedExtensions: (_extension?.isNotEmpty ?? false)
-            ? _extension?.replaceAll(' ', '').split(',')
-            : null,
-      ))
-          ?.files;
+        // onFileLoading: (FilePickerStatus status) => print(status),
+      );
+
+      if (pickResult != null) {
+        pickedFiles = pickResult.files;
+      }
+
     } on PlatformException catch (e) {
-      _logException('Unsupported operation' + e.toString());
+      _logException('Unsupported operation: $e');
     } catch (e) {
       _logException(e.toString());
     }
@@ -74,10 +77,10 @@ class _ImageFilePickerState extends State<ImageFilePicker> {
     // maybe the widget has been dismount meanwhile loading
     if (!mounted) return;
 
-    if (pickFilesResult != null) {
+    if (pickedFiles != null) {
       setState(() {
-        isFileSelected = true;
-        selectedFile = pickFilesResult![0];
+        selectedFile = pickedFiles![0];
+        hasSelectedImage = true;
         // _isLoading = false;
         // _fileName =
         // _paths != null ? _paths!.map((e) => e.name).toString() : '...';
@@ -87,14 +90,12 @@ class _ImageFilePickerState extends State<ImageFilePicker> {
       if (widget.onImageFileSelected != null) {
         widget.onImageFileSelected!(selectedFile!.bytes);
       }
+
     }
-
-
 
   }
 
   void _logException(String message) {
-    print(message);
     _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     _scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
@@ -108,12 +109,12 @@ class _ImageFilePickerState extends State<ImageFilePicker> {
       return;
     }
     setState(() {
-      _isLoading = true;
-      _directoryPath = null;
-      _fileName = null;
-      _paths = [];
-      _saveAsFileName = null;
-      _userAborted = false;
+      // _isLoading = true;
+      // _directoryPath = null;
+      // _fileName = null;
+      // _paths = [];
+      // _saveAsFileName = null;
+      // _userAborted = false;
     });
   }
 
@@ -122,8 +123,12 @@ class _ImageFilePickerState extends State<ImageFilePicker> {
 
     return Row(
       children: [
-        if (widget.currentImageUrl != null) buildCurrentImageDisplay(widget.currentImageUrl!),
+        buildCurrentImageDisplay(),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.grey,
+          ),
+          // style: Theme.of(context).outlinedButtonTheme.style,
           onPressed: () => _pickFiles(),
           child: const Text('Pick file'),
         ),
@@ -132,16 +137,22 @@ class _ImageFilePickerState extends State<ImageFilePicker> {
 
   }
 
-  Widget buildCurrentImageDisplay(String currentImageUrl) {
+  Widget buildCurrentImageDisplay() {
 
     Widget image;
 
-    if (isFileSelected) {
+    if (hasInitialValue) {
+      image = Image(
+        image: NetworkImage(widget.initialValue!)
+      );
+    } else if (hasSelectedImage) {
       Uint8List bytes = selectedFile!.bytes!;
       image = Image.memory(bytes);
     } else {
-      image = Image(
-        image: NetworkImage(currentImageUrl)
+      image = Container(
+        width: 200,
+        height: 200,
+        color: Colors.purpleAccent,
       );
     }
 

@@ -3,52 +3,60 @@ import 'dart:typed_data';
 import 'package:author_repository/author_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lazitsapp_admin/bloc/author/author_bloc.dart';
-import 'package:lazitsapp_admin/widget/form/validator_functions.dart';
 import 'package:lazitsapp_admin/widget/util/image_file_picker.dart';
 
-class AuthorDetailForm extends StatefulWidget {
+
+class AuthorUpdateForm extends StatefulWidget {
 
   final Author author;
 
-  const AuthorDetailForm(this.author, {Key? key}) : super(key: key);
+  const AuthorUpdateForm(this.author, {Key? key}) : super(key: key);
 
   @override
-  State<AuthorDetailForm> createState() => _AuthorDetailFormState();
+  State<AuthorUpdateForm> createState() => _AuthorUpdateFormState();
+
 }
 
-class _AuthorDetailFormState extends State<AuthorDetailForm> {
+class _AuthorUpdateFormState extends State<AuthorUpdateForm> {
 
-  final _formKey = GlobalKey<FormState>();
-  late Author updatedAuthor;
+  final _formKey = GlobalKey<FormBuilderState>();
   bool isProfileImageChanged = false;
   Uint8List? imageBytes;
 
   @override
   void initState() {
     super.initState();
-    updatedAuthor = widget.author.copyWith();
   }
 
   void onSave() {
-    FormState formState = _formKey.currentState!;
-    if (formState.validate()) {
+    FormBuilderState? formState = _formKey.currentState;
+
+    if (formState != null && formState.saveAndValidate()) {
+
+      Map<String, dynamic>? values = formState.value;
+
+      Author author = widget.author.copyWith(
+        displayName: values['displayName'],
+        title: values['title'],
+      );
 
       if (isProfileImageChanged) {
         BlocProvider.of<AuthorBloc>(context)
-          .add(UpdateAuthorWithProfileImage(
-            updatedAuthor,
-            imageBytes!
-        ));
+          .add(UpdateAuthorWithProfileImage(author, imageBytes!));
       } else {
         BlocProvider.of<AuthorBloc>(context)
-          .add(UpdateAuthor(updatedAuthor));
+          .add(UpdateAuthor(author));
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Saving...')),
       );
+
     }
+
   }
 
   @override
@@ -58,51 +66,45 @@ class _AuthorDetailFormState extends State<AuthorDetailForm> {
 
     return Column(
       children: [
-        Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
 
-              // Id
-              TextFormField(
-                readOnly: true,
+        FormBuilder(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.disabled,
+          skipDisabled: true,
+          child: Column(
+            children: [
+
+              FormBuilderTextField(
+                name: 'id',
                 decoration: const InputDecoration(labelText: 'Id'),
+                readOnly: true,
                 initialValue: author.authorId,
               ),
 
-              // Name
-              TextFormField(
+              FormBuilderTextField(
+                name: 'displayName',
                 decoration: const InputDecoration(labelText: 'Name'),
                 initialValue: author.displayName,
-                validator: requiredValidator(),
-                onChanged: (String? displayName) {
-                  setState(() {
-                    updatedAuthor = updatedAuthor.copyWith(
-                      displayName: displayName
-                    );
-                  });
-                },
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                ]),
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
               ),
 
-              // Short description
-              TextFormField(
+              FormBuilderTextField(
+                name: 'title',
                 decoration: const InputDecoration(labelText: 'Title'),
                 initialValue: author.title,
-                validator: requiredValidator(),
-                onChanged: (String? title) {
-                  setState(() {
-                    updatedAuthor = updatedAuthor.copyWith(
-                      title: title
-                    );
-                  });
-                },
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                ]),
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
               ),
 
-              const SizedBox(height: 16),
-
               ImageFilePicker(
-                currentImageUrl: author.photoUrl,
+                initialValue: author.photoUrl,
                 onImageFileSelected: (imageBytes) {
                   setState(() {
                     isProfileImageChanged = true;
@@ -119,8 +121,9 @@ class _AuthorDetailFormState extends State<AuthorDetailForm> {
               ),
 
             ],
-          ),
+          )
         )
+
       ],
     );
 

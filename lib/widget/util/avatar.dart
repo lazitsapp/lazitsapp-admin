@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {
 
-  static const avatar_placeholder_image_url = 'assets/images/avatar_placeholder.png';
+  static const avatarPlaceholderImageUrl = 'assets/images/avatar_placeholder.png';
 
   final String photoUrl;
   final double size;
@@ -49,7 +49,7 @@ class Avatar extends StatelessWidget {
           shape: BoxShape.circle,
           image: DecorationImage(
               opacity: opacity,
-              image: AssetImage(Avatar.avatar_placeholder_image_url), fit: BoxFit.cover
+              image: const AssetImage(Avatar.avatarPlaceholderImageUrl), fit: BoxFit.cover
           ),
         ),
       );

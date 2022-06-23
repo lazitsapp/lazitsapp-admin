@@ -1,5 +1,5 @@
+import 'package:article_repository/article_repository.dart';
 import 'package:author_repository/author_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +23,7 @@ class AuthorUpdatePage extends StatelessWidget {
     return BlocProvider<AuthorBloc>(
       create: (BuildContext context) => AuthorBloc(
         FirebaseAuthorRepository(firebaseProvider.firebaseFirestore),
+        FirebaseArticleRepository(firebaseProvider.firebaseFirestore),
         FirebaseStorageRepository(firebaseProvider.firebaseStorage)
       )..add(LoadAuthor(authorId)),
       child: const DefaultAppScaffolding(
@@ -59,7 +60,7 @@ class AuthorUpdatePageDataProvider extends StatelessWidget {
                       style: Theme.of(context).textTheme.headlineSmall
                     ),
                     const SizedBox(height: 16.0),
-                    AuthorDetailForm(author),
+                    AuthorUpdateForm(author),
                   ],
                 ),
               ),

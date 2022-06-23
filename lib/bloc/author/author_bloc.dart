@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:article_repository/article_repository.dart';
 import 'package:author_repository/author_repository.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +12,16 @@ part 'author_state.dart';
 class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
 
   final AuthorRepository _authorRepository;
+  final ArticleRepository _articleRepository;
   final StorageRepository _storageRepository;
   
   AuthorBloc(
     AuthorRepository authorRepository,
-    StorageRepository storageRepository
+    ArticleRepository articleRepository,
+    StorageRepository storageRepository,
   ) :
     _authorRepository = authorRepository,
+    _articleRepository = articleRepository,
     _storageRepository = storageRepository,
     super(const AuthorInitialState()) {
 
@@ -61,17 +65,35 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
   ) async {
     emit(const AuthorUpdatingState());
 
-    UploadTask uploadTask = _storageRepository.storeAuthorProfileImage(
-      event.author.authorId,
-      event.imageBytes,
-    );
+    Uint8List? imageBytes = event.imageBytes;
 
-    await uploadTask.whenComplete(() => null);
+    // upload author image
+    if (imageBytes != null) {
+      UploadTask uploadTask = _storageRepository.storeAuthorProfileImage(
+        event.author.authorId,
+        imageBytes,
+      );
+      await uploadTask.whenComplete(() => null);
 
+      String fullPath = await uploadTask.snapshot.ref.getDownloadURL();
 
+      Author authorUpdatedPhotoUrl = event.author.copyWith(
+        photoUrl: fullPath
+      );
 
+      await _authorRepository.updateAuthor(authorUpdatedPhotoUrl);
+      await _articleRepository.updateAuthorReferences(
+        ArticleAuthor(
+          authorUpdatedPhotoUrl.authorId,
+          authorUpdatedPhotoUrl.displayName,
+          authorUpdatedPhotoUrl.title,
+          authorUpdatedPhotoUrl.photoUrl
+        )
+      );
 
-
+    } else {
+      await _authorRepository.updateAuthor(event.author);
+    }
 
   }
 

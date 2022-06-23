@@ -1,91 +1,90 @@
-import 'dart:async';
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lazitsapp_admin/bloc/auth/auth_bloc.dart';
-import 'package:lazitsapp_admin/router/router_utils.dart';
+import 'package:lazitsapp_admin/router/app_page.dart';
 import 'package:lazitsapp_admin/widget/page/page.dart';
+
+import '../bloc/auth/auth_bloc.dart';
 
 class AppRouter {
 
-  GoRouter get router => _goRouter;
+  final AuthBloc _authBloc;
 
-  final AuthenticationRepository _authentitactionRepository;
-
-  bool isAuthenticated = false;
-  late StreamSubscription _authStateSub;
-
-  AppRouter(AuthenticationRepository authenticationRepository) :
-    _authentitactionRepository = authenticationRepository {
-
-    _authStateSub = _authentitactionRepository
-      .authStateChange
-      .listen((User? user) {
-        if (user != null) {
-          isAuthenticated = true;
-        } else {
-          isAuthenticated = false;
-        }
-      });
-
-  }
-
-  void dispose() {
-    _authStateSub.cancel();
-  }
+  AppRouter(AuthBloc authBloc) : _authBloc = authBloc;
 
   late final GoRouter _goRouter = GoRouter(
-
-    // refreshListenable: appService,
     
-    initialLocation: AppPage.home.toPath,
+    initialLocation: AppPage.home.path,
     
     routes: <GoRoute>[
 
       // Home
       GoRoute(
-        path: AppPage.home.toPath,
-        name: AppPage.home.toName,
+        path: AppPage.home.path,
+        name: AppPage.home.name,
         builder: (context, state) => const HomePage(),
       ),
 
       // Error
       GoRoute(
-        path: AppPage.error.toPath,
-        name: AppPage.error.toName,
+        path: AppPage.error.path,
+        name: AppPage.error.name,
         builder: (context, state) => ErrorPage(error: state.extra.toString()),
       ),
 
       // Login
       GoRoute(
-        path: AppPage.login.toPath,
-        name: AppPage.login.toName,
+        path: AppPage.login.path,
+        name: AppPage.login.name,
         builder: (context, state) => const LoginPage(),
       ),
 
+      // Author
       GoRoute(
-        path: AppPage.authors.toPath,
-        name: AppPage.authors.toName,
+        path: AppPage.authorList.path,
+        name: AppPage.authorList.name,
         builder: (context, state) => const AuthorListPage(),
         routes: [
           GoRoute(
-            path: AppPage.authorUpdate.toPath,
-            name: AppPage.authorUpdate.toName,
+            path: AppPage.authorUpdate.path,
+            name: AppPage.authorUpdate.name,
             builder: (context, state) {
               final String authorId
                 = state.params['authorId']!;
               return AuthorUpdatePage(authorId);
             }
           ),
-          // GoRoute(
-          //   path: AppPage.authorCreate.toPath,
-          //   name: AppPage.authorCreate.toName,
-          //   builder: (context, state) {
-          //
-          //   }
-          // )
+          GoRoute(
+            path: AppPage.authorCreate.path,
+            name: AppPage.authorCreate.name,
+            builder: (context, state) => const AuthorCreatePage()
+          )
         ]
       ),
+
+      // Category
+      GoRoute(
+        path: AppPage.categoryList.path,
+        name: AppPage.categoryList.name,
+        builder: (context, state) => const CategoryListPage(),
+        routes: [
+          GoRoute(
+            path: AppPage.categoryUpdate.path,
+            name: AppPage.categoryUpdate.name,
+            builder: (context, state) {
+              final String categoryId
+              = state.params['categoryId']!;
+              return CategoryUpdatePage(categoryId);
+            }
+          ),
+          GoRoute(
+            path: AppPage.categoryCreate.path,
+            name: AppPage.categoryCreate.name,
+            builder: (context, state) => const AuthorCreatePage()
+          )
+        ]
+      ),
+
+      // Article
 
 
     ],
@@ -93,17 +92,25 @@ class AppRouter {
     errorBuilder: (context, state) => ErrorPage(error: state.error.toString()),
 
     redirect: (state) {
-      final loginLocation = state.namedLocation(AppPage.login.toName);
-      final isOnLoginPage = state.subloc == loginLocation;
+      final bool isAuthenticated = _authBloc.state.authStatus == AuthStatus.signedIn;
+      final loginLocation = (state.namedLocation(AppPage.login.name));
+      final isOnLoginPage = (state.subloc == loginLocation);
 
-
-      if (isAuthenticated == false && isOnLoginPage == false) {
+      if (isAuthenticated && isOnLoginPage) {
+        return state.namedLocation(AppPage.home.name);
+      } else if (isAuthenticated == false && isOnLoginPage) {
+        return null;
+      } else if (isAuthenticated == false && isOnLoginPage == false) {
+        debugPrint('redirecting to login');
         return loginLocation;
       } else {
         return null;
       }
+
     }
 
   );
+
+  GoRouter get router => _goRouter;
 
 }

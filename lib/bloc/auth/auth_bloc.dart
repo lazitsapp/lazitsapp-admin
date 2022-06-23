@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:profile_repository/profile_repository.dart';
@@ -45,11 +46,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       add(UserChange(profile));
     });
 
+    on<InitializeAuth>(_onInitializeAuth);
     on<Signin>(_onSignin);
     on<SigninWithEmailAndPassword>(_onSigninWithEmailAndPassword);
     on<AuthStateChange>(_onAuthStateChange);
     on<UserChange>(_onUserChange);
     on<Signout>(_onSignout);
+
+  }
+
+  void _onInitializeAuth(InitializeAuth event, emit) async {
+    User? user = await _authenticationRepository.authStateChange.first;
+    if (user != null) {
+      emit(state.copyWith(
+        user: user,
+        authStatus: AuthStatus.signedIn,
+        isInitialized: true,
+      ));
+    } else {
+      emit(state.copyWith(
+        user: null,
+        authStatus: AuthStatus.signedOut,
+        isInitialized: true,
+      ));
+    }
   }
 
   void _onSignin(Signin event, emit) async {
@@ -107,10 +127,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         user: signinResult.user,
         authStatus: AuthStatus.signedIn
       ));
-
-      if (event.onLoginSuccessful != null) {
-        event.onLoginSuccessful!();
-      }
 
     } catch (error) {
 

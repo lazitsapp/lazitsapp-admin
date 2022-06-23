@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lazitsapp_admin/router/router_utils.dart';
+import 'package:lazitsapp_admin/router/router.dart';
 import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 
 class ErrorPage extends StatelessWidget {
@@ -22,7 +22,7 @@ class ErrorPage extends StatelessWidget {
             Text(error ?? ""),
             TextButton(
               onPressed: () {
-                GoRouter.of(context).goNamed(AppPage.home.toName);
+                GoRouter.of(context).goNamed(AppPage.home.name);
               },
               child: const Text(
                   "Back to Home"
