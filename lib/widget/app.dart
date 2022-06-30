@@ -2,7 +2,6 @@ import 'package:article_repository/article_repository.dart';
 import 'package:author_repository/author_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:category_repository/category_repository.dart';
-
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +36,6 @@ class _LazitsAppAdminState extends State<LazitsAppAdmin> {
   late final CategoryRepository categoryRepository;
   late final ProfileRepository profileRepository;
 
-
   @override
   void initState() {
 
@@ -59,12 +57,7 @@ class _LazitsAppAdminState extends State<LazitsAppAdmin> {
       authenticationRepository: authenticationRepository,
       profileRepository: profileRepository,
     );
-
-    appRouter = AppRouter(
-
-      authBloc
-
-    );
+    appRouter = AppRouter(authBloc);
 
     super.initState();
   }
@@ -80,7 +73,6 @@ class _LazitsAppAdminState extends State<LazitsAppAdmin> {
     return MultiProvider(
       providers: [
         Provider<FirebaseProvider>(create: (_) => widget.firebaseProvider),
-
       ],
       child: BlocProvider<AuthBloc>(
           create: (BuildContext context) => authBloc..add(const InitializeAuth()),

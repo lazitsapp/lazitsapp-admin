@@ -43,11 +43,10 @@ class AuthorUpdatePageDataProvider extends StatelessWidget {
     return BlocBuilder<AuthorBloc, AuthorState>(
         builder: (BuildContext context, AuthorState state) {
 
-          Author? author = state.author;
+          if (state is AuthorLoadedState) {
 
-          if (state is AuthorLoadingState) {
-            return const Text('loading');
-          } else if (author != null) {
+            Author author = state.author;
+
             return ConstrainedBox(
               constraints: const BoxConstraints.tightFor(width: 512.0),
               child: Padding(
@@ -56,8 +55,8 @@ class AuthorUpdatePageDataProvider extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Edit Author',
-                      style: Theme.of(context).textTheme.headlineSmall
+                        'Edit Author',
+                        style: Theme.of(context).textTheme.headlineSmall
                     ),
                     const SizedBox(height: 16.0),
                     AuthorUpdateForm(author),
@@ -65,9 +64,17 @@ class AuthorUpdatePageDataProvider extends StatelessWidget {
                 ),
               ),
             );
-          } else {
-            return const Text('No author to display!');
           }
+
+          if (state is AuthorErrorState) {
+            return Text(state.errorMessage);
+          }
+
+          if (state is AuthorLoadingState) {
+            return const Text('loading');
+          }
+
+          return const Text('No author to display!');
 
         }
     );

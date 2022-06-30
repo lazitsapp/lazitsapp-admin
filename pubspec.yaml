@@ -39,6 +39,8 @@ dependencies:
   equatable: ^2.0.3
   file_picker: ^4.6.1
   provider: ^6.0.3
+  flutter_form_builder: ^7.2.1
+  form_builder_validators: ^8.1.1
 
   article_repository:
     path: lazitsapp-packages/article_repository
@@ -56,8 +58,7 @@ dependencies:
     path: lazitsapp-packages/session_repository
   storage_repository:
     path: lazitsapp-packages/storage_repository
-  flutter_form_builder: ^7.2.1
-  form_builder_validators: ^8.1.1
+
 
 dev_dependencies:
   flutter_test:

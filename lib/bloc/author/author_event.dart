@@ -15,44 +15,67 @@ class LoadAuthor extends AuthorEvent {
 
 }
 
-class LoadAuthorSuccess extends AuthorEvent {
-
-  final Author author;
-
-  const LoadAuthorSuccess(this.author);
-
-  @override
-  List<Object> get props => [author];
-
-  @override
-  String toString() => 'LoadAuthorSuccess { Author: $author }';
-
-}
-
-class LoadAuthorError extends AuthorEvent {
+class AuthorLoadingEvent extends AuthorEvent {
   @override
   List<Object> get props => [];
 }
 
-class UpdateAuthor extends AuthorEvent {
+class AuthorErrorEvent extends AuthorEvent {
 
-  final Author author;
+  final String? errorMessage;
 
-  const UpdateAuthor(this.author);
+  const AuthorErrorEvent(this.errorMessage);
 
   @override
-  List<Object> get props => [author];
+  List<Object> get props => [];
+
 }
 
-class UpdateAuthorWithProfileImage extends AuthorEvent {
+class CreateAuthor extends AuthorEvent {
 
-  final Author author;
-  final Uint8List? imageBytes;
+  final String displayName;
+  final String title;
+  final Uint8List imageBytes;
 
-  const UpdateAuthorWithProfileImage(this.author, this.imageBytes);
+  const CreateAuthor({
+    required this.displayName,
+    required this.title,
+    required this.imageBytes,
+  });
 
   @override
-  List<Object> get props => [author];
+  List<Object> get props => [
+    displayName,
+    title,
+    imageBytes,
+  ];
+
+}
+
+class UpdateAuthor extends AuthorEvent {
+
+  final String authorId;
+  final String displayName;
+  final String title;
+  final String photoUrl;
+  final Uint8List? imageBytes;
+
+  const UpdateAuthor({
+    required this.authorId,
+    required this.displayName,
+    required this.title,
+    required this.photoUrl,
+    this.imageBytes,
+  });
+
+  @override
+  List<Object> get props => [
+    authorId,
+    displayName,
+    title,
+    photoUrl,
+  ];
+
 }
 
 class UpdateAuthorSuccess extends AuthorEvent {
@@ -60,7 +83,12 @@ class UpdateAuthorSuccess extends AuthorEvent {
   List<Object> get props => [];
 }
 
-class UpdateAuthorError extends AuthorEvent {
+class DeleteAuthor extends AuthorEvent {
+
+  final Author author;
+
+  const DeleteAuthor(this.author);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [author];
 }

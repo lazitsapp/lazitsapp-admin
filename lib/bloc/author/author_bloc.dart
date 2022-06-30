@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:article_repository/article_repository.dart';
 import 'package:author_repository/author_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:lazitsapp_admin/bloc/authors/authors_bloc.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -23,82 +25,107 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
     _authorRepository = authorRepository,
     _articleRepository = articleRepository,
     _storageRepository = storageRepository,
-    super(const AuthorInitialState()) {
+    super(AuthorInitialState()) {
 
     on<LoadAuthor>(_onLoadAuthor);
-    on<LoadAuthorSuccess>(_onLoadAuthorSuccess);
-    on<LoadAuthorError>(_onLoadAuthorError);
-
     on<UpdateAuthor>(_onUpdateAuthor);
-    on<UpdateAuthorWithProfileImage>(_onUpdateAuthorWithProfileImage);
-    on<UpdateAuthorError>(_onUpdateAuthorError);
+    on<CreateAuthor>(_onCreateAuthor);
+    on<DeleteAuthor>(_onDeleteAuthor);
   }
 
   void _onLoadAuthor(LoadAuthor event, emit) async {
-    emit(const AuthorLoadingState());
+    emit(AuthorLoadingState());
 
     Author author = await _authorRepository
       .getAuthor(event.authorId);
 
-    add(LoadAuthorSuccess(author));
-  }
-
-  void _onLoadAuthorSuccess(LoadAuthorSuccess event, emit) {
-    emit(AuthorLoadedState(event.author));
-  }
-
-  void _onLoadAuthorError(LoadAuthorError event, emit) {
-    emit(const AuthorLoadingErrorState());
+    emit(AuthorLoadedState(author));
   }
 
   void _onUpdateAuthor(UpdateAuthor event, emit) async {
-    emit(const AuthorUpdatingState());
+    emit(AuthorLoadingState());
 
-    await _authorRepository.updateAuthor(event.author);
+    Author author = Author(
+      authorId: event.authorId,
+      displayName: event.displayName,
+      title: event.title,
+      photoUrl: event.photoUrl,
+    );
 
-    add(LoadAuthorSuccess(event.author));
-  }
+    final Uint8List? imageBytes = event.imageBytes;
 
-  void _onUpdateAuthorWithProfileImage(
-    UpdateAuthorWithProfileImage event,
-    emit
-  ) async {
-    emit(const AuthorUpdatingState());
-
-    Uint8List? imageBytes = event.imageBytes;
-
-    // upload author image
     if (imageBytes != null) {
       UploadTask uploadTask = _storageRepository.storeAuthorProfileImage(
-        event.author.authorId,
+        author.authorId,
         imageBytes,
       );
       await uploadTask.whenComplete(() => null);
 
-      String fullPath = await uploadTask.snapshot.ref.getDownloadURL();
-
-      Author authorUpdatedPhotoUrl = event.author.copyWith(
-        photoUrl: fullPath
+      String photoUrl = await uploadTask.snapshot.ref.getDownloadURL();
+      author = author.copyWith(
+        photoUrl: photoUrl
       );
-
-      await _authorRepository.updateAuthor(authorUpdatedPhotoUrl);
-      await _articleRepository.updateAuthorReferences(
-        ArticleAuthor(
-          authorUpdatedPhotoUrl.authorId,
-          authorUpdatedPhotoUrl.displayName,
-          authorUpdatedPhotoUrl.title,
-          authorUpdatedPhotoUrl.photoUrl
-        )
-      );
-
-    } else {
-      await _authorRepository.updateAuthor(event.author);
     }
 
+    debugPrint(author.toString());
+
+    await _authorRepository.updateAuthor(author);
+    await _articleRepository.updateAuthorReferences(
+      ArticleAuthor(
+        author.authorId,
+        author.displayName,
+        author.title,
+        author.photoUrl
+      )
+    );
+
+    emit(AuthorLoadedState(author));
   }
 
-  void _onUpdateAuthorError(UpdateAuthorError event, emit) {
-    emit(UpdateAuthorError());
+  void _onCreateAuthor(CreateAuthor event, emit) async {
+    emit(AuthorLoadingState());
+
+    String authorId = Author.generateId();
+
+    // upload file
+    UploadTask uploadTask = _storageRepository.storeAuthorProfileImage(
+      authorId,
+      event.imageBytes,
+    );
+    await uploadTask.whenComplete(() => null);
+
+    String photoUrl = await uploadTask.snapshot.ref.getDownloadURL();
+
+    Author author = Author(
+      authorId: authorId,
+      displayName: event.displayName,
+      title: event.title,
+      photoUrl: photoUrl,
+    );
+
+    await _authorRepository.setAuthor(author);
+    emit(AuthorLoadedState(author));
+  }
+
+  // void _onAuthorError(AuthorErrorEvent event, emit) {
+  //   emit(const AuthorErrorState());
+  // }
+
+  void _onDeleteAuthor(DeleteAuthor event, emit) async {
+
+    try {
+      emit(AuthorLoadingState());
+      bool hasArticles = await _authorRepository.hasArticles(event.author);
+      if (hasArticles) {
+        throw Exception('Cannot delete author ${event.author.authorId} still having articles associated!');
+      } else {
+        await _authorRepository.deleteAuthor(event.author);
+      }
+
+    } catch (err) {
+      emit(AuthorErrorState(err.toString()));
+    }
+
   }
 
 }

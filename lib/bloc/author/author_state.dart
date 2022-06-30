@@ -1,31 +1,36 @@
 part of 'author_bloc.dart';
 
 abstract class AuthorState extends Equatable {
-  
-  final Author? author;
-  
-  const AuthorState(this.author);
+  const AuthorState();
+}
 
+class AuthorInitialState extends AuthorState {
   @override
   List<Object> get props => [];
 }
 
-class AuthorInitialState extends AuthorState {
-  const AuthorInitialState() : super(null);
-}
-
 class AuthorLoadingState extends AuthorState {
-  const AuthorLoadingState() : super(null);
+  @override
+  List<Object> get props => [];
 }
 
 class AuthorLoadedState extends AuthorState {
-  const AuthorLoadedState(Author author) : super(author);
+
+  final Author author;
+
+  const AuthorLoadedState(this.author);
+
+  @override
+  List<Object> get props => [author];
+
 }
 
-class AuthorLoadingErrorState extends AuthorState {
-  const AuthorLoadingErrorState() : super(null);
-}
+class AuthorErrorState extends AuthorState {
 
-class AuthorUpdatingState extends AuthorState {
-  const AuthorUpdatingState() : super(null);
+  final String errorMessage;
+  const AuthorErrorState(this.errorMessage);
+
+  @override
+  List<Object> get props => [errorMessage];
+
 }
