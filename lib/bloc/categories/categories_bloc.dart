@@ -21,8 +21,10 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   void _onLoadCategories(LoadCategories event, emit) async {
     emit(const CategoriesLoadingState());
 
-    List<ArticleCategory> categories = await _categoryRepository
-      .getCategories(isActive: true);
+    List<Category> categories = await _categoryRepository
+      .getCategories(const CategoryQueryOptions(
+        activeQueryOption: CategoryActiveQueryOption.all,
+      ));
 
     add(LoadCategoriesSuccess(categories));
   }

@@ -1,11 +1,15 @@
+import 'package:article_repository/article_repository.dart';
 import 'package:category_repository/category_repository.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazitsapp_admin/bloc/category/category_bloc.dart';
+import 'package:lazitsapp_admin/widget/article/article.dart';
 import 'package:lazitsapp_admin/widget/category/category.dart';
 import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 import 'package:provider/provider.dart';
+
+import '../../bloc/articles/articles_bloc.dart';
 
 class CategoryUpdatePage extends StatelessWidget {
 
@@ -18,10 +22,26 @@ class CategoryUpdatePage extends StatelessWidget {
 
     FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
 
-    return BlocProvider<CategoryBloc>(
-      create: (BuildContext context) => CategoryBloc(
-        FirebaseCategoryRepository(firebaseProvider.firebaseFirestore)
-      )..add(LoadCategory(categoryId)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CategoryBloc>(
+          create: (context) => CategoryBloc(
+            categoryRepository: FirebaseCategoryRepository(
+              firebaseProvider.firebaseFirestore
+            ),
+            articleRepository: FirebaseArticleRepository(
+              firebaseProvider.firebaseFirestore
+            ),
+          )..add(LoadCategory(categoryId)),
+        ),
+        BlocProvider<ArticlesBloc>(
+          create: (context) => ArticlesBloc(
+            articleRepository: FirebaseArticleRepository(
+              firebaseProvider.firebaseFirestore
+            )
+          )..add(LoadArticles(categoryId)),
+        ),
+      ],
       child: const DefaultAppScaffolding(
         body: CategoryDetailPageDataProvider()
       )
@@ -37,42 +57,96 @@ class CategoryDetailPageDataProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return BlocBuilder<CategoryBloc, CategoryState>(
-        builder: (BuildContext context, CategoryState state) {
 
-          ArticleCategory? articleCategory = state.category;
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: BlocBuilder<CategoryBloc, CategoryState>(
+        builder: (context, state) {
 
           if (state is CategoryLoadingState) {
-            return const Text('loading');
-          } else if (articleCategory != null) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Edit Category',
-                    style: Theme.of(context).textTheme.headlineSmall
-                  ),
-                  const SizedBox(height: 16.0),
-                  CategoryUpdateForm(articleCategory),
-                  const SizedBox(height: 32.0),
-                  Text(
-                    'Category Articles',
-                    style: Theme.of(context).textTheme.headlineSmall
-                  ),
-                  const SizedBox(height: 16.0),
-                  CategoryUpdateArticles(articleCategory),
-                ],
-              ),
-            );
-          } else {
-            return const Text('No category to display');
+            return const Text('Loading Category');
           }
 
-        }
+          if (state is CategoryErrorState) {
+            return Text(state.errorMessage);
+          }
+
+          if (state is CategoryLoadedState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildForm(context),
+                buildArticles(context),
+              ],
+            );
+          }
+
+          return const Text('Cannot display category!');
+
+        },
+      ),
     );
 
+
+
+  }
+
+  Widget buildForm(BuildContext context) {
+    return BlocBuilder<CategoryBloc, CategoryState>(
+      builder: (context, state) {
+
+        if (state is CategoryLoadedState) {
+          Category? category = state.category;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Edit Category',
+                style: Theme.of(context).textTheme.headlineSmall
+              ),
+              const SizedBox(height: 16.0),
+              CategoryUpdateForm(category),
+            ],
+          );
+        }
+
+        return const Text('No category to display');
+
+      },
+    );
+  }
+
+  Widget buildArticles(BuildContext context) {
+    return BlocBuilder<ArticlesBloc, ArticlesState>(
+      builder: (context, state) {
+
+        if (state is ArticlesLoadingState) {
+          return const Text('Loading articles for category');
+        }
+
+        if (state is ArticlesLoadedState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 32.0),
+              Text(
+                  'Category Articles',
+                  style: Theme.of(context).textTheme.headlineSmall
+              ),
+              const SizedBox(height: 16.0),
+              ArticlesList(state.articles),
+            ],
+          );
+        }
+
+        if (state is ArticlesLoadingErrorState) {
+          return Text(state.errorMessage);
+        }
+
+        return const Text('No articles to display');
+      },
+    );
   }
 
 }

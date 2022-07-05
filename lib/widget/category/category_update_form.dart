@@ -5,11 +5,13 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lazitsapp_admin/bloc/category/category_bloc.dart';
 
+import '../util/show_alert_dialog.dart';
+
 class CategoryUpdateForm extends StatefulWidget {
 
-  final ArticleCategory articleCategory;
+  final Category category;
 
-  const CategoryUpdateForm(this.articleCategory, {Key? key}) : super(key: key);
+  const CategoryUpdateForm(this.category, {Key? key}) : super(key: key);
 
   @override
   State<CategoryUpdateForm> createState() => _CategoryUpdateFormState();
@@ -21,33 +23,40 @@ class _CategoryUpdateFormState extends State<CategoryUpdateForm> {
 
   void onSave() {
     FormBuilderState? formState = _formKey.currentState;
-
     if (formState != null && formState.saveAndValidate()) {
-
       Map<String, dynamic>? values = formState.value;
-
-      ArticleCategory category = widget.articleCategory.copyWith(
-        name: values['name'],
-        shortDescription: values['shortDescription'],
-        priority: values['priority'],
-        articleCategoryType: values['articleCategoryType'] as ArticleCategoryType
-      );
-
       BlocProvider.of<CategoryBloc>(context)
-        .add(UpdateCategory(category));
-
+        .add(UpdateCategory(
+          articleId: values['articleId'],
+          name: values['name'],
+          shortDescription: values['shortDescription'],
+          categoryType: values['articleCategoryType'],
+          priority: values['priority'],
+          isActive: values['isActive'],
+        ));
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Saving...')),
+        const SnackBar(content: Text('Creating...')),
       );
-
     }
+  }
 
+  void onDelete(BuildContext context) {
+    showAlertDialog(
+      title: 'Delete Category',
+      content: 'Are you sure you want to delete the author?',
+      context: context,
+      onAccept: () {
+        BlocProvider.of<CategoryBloc>(context).add(DeleteCategory(widget.category));
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+      acceptButtonText: 'Delete Category',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
 
-      ArticleCategory category = widget.articleCategory;
+      Category category = widget.category;
 
       return Column(
         children: [
@@ -60,10 +69,10 @@ class _CategoryUpdateFormState extends State<CategoryUpdateForm> {
               children: [
 
                 FormBuilderTextField(
-                  name: 'id',
+                  name: 'articleId',
                   decoration: const InputDecoration(labelText: 'Id'),
                   readOnly: true,
-                  initialValue: category.id,
+                  initialValue: category.categoryId,
                 ),
 
                 FormBuilderTextField(
@@ -102,11 +111,11 @@ class _CategoryUpdateFormState extends State<CategoryUpdateForm> {
                   textInputAction: TextInputAction.next,
                 ),
 
-                FormBuilderDropdown<ArticleCategoryType>(
+                FormBuilderDropdown<CategoryType>(
                   name: 'articleCategoryType',
-                  initialValue: category.articleCategoryType,
-                  items: ArticleCategoryType.values.map((type) {
-                    return DropdownMenuItem<ArticleCategoryType>(
+                  initialValue: category.categoryType,
+                  items: CategoryType.values.map((type) {
+                    return DropdownMenuItem<CategoryType>(
                       value: type,
                       child: Text(type.toString())
                     );
@@ -122,9 +131,23 @@ class _CategoryUpdateFormState extends State<CategoryUpdateForm> {
 
                 const SizedBox(height: 16),
 
-                ElevatedButton(
-                  onPressed: onSave,
-                  child: const Text('Save'),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      onPressed: onSave,
+                      child: const Text('Save'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      onPressed: () => onDelete(context),
+                      child: const Text('Delete'),
+                    ),
+                  ],
                 ),
 
               ],

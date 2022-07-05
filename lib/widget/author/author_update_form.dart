@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:author_repository/author_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,11 +31,8 @@ class _AuthorUpdateFormState extends State<AuthorUpdateForm> {
 
   void onSave() {
     FormBuilderState? formState = _formKey.currentState;
-
     if (formState != null && formState.saveAndValidate()) {
-
       Map<String, dynamic>? values = formState.value;
-
       BlocProvider.of<AuthorBloc>(context)
         .add(UpdateAuthor(
           authorId: values['authorId']!,
@@ -49,9 +45,7 @@ class _AuthorUpdateFormState extends State<AuthorUpdateForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Saving...')),
       );
-
     }
-
   }
 
   void onDelete(BuildContext context) {
@@ -76,7 +70,6 @@ class _AuthorUpdateFormState extends State<AuthorUpdateForm> {
       listener: (context, state) {
         if (state is AuthorErrorState) {
           AuthorErrorState errorState = state;
-          print(errorState.errorMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.red,

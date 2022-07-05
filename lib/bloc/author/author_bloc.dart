@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:article_repository/article_repository.dart';
 import 'package:author_repository/author_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:lazitsapp_admin/bloc/authors/authors_bloc.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -106,10 +105,6 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
     await _authorRepository.setAuthor(author);
     emit(AuthorLoadedState(author));
   }
-
-  // void _onAuthorError(AuthorErrorEvent event, emit) {
-  //   emit(const AuthorErrorState());
-  // }
 
   void _onDeleteAuthor(DeleteAuthor event, emit) async {
 

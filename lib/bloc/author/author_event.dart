@@ -15,22 +15,6 @@ class LoadAuthor extends AuthorEvent {
 
 }
 
-class AuthorLoadingEvent extends AuthorEvent {
-  @override
-  List<Object> get props => [];
-}
-
-class AuthorErrorEvent extends AuthorEvent {
-
-  final String? errorMessage;
-
-  const AuthorErrorEvent(this.errorMessage);
-
-  @override
-  List<Object> get props => [];
-
-}
-
 class CreateAuthor extends AuthorEvent {
 
   final String displayName;
@@ -78,11 +62,6 @@ class UpdateAuthor extends AuthorEvent {
 
 }
 
-class UpdateAuthorSuccess extends AuthorEvent {
-  @override
-  List<Object> get props => [];
-}
-
 class DeleteAuthor extends AuthorEvent {
 
   final Author author;
@@ -91,4 +70,5 @@ class DeleteAuthor extends AuthorEvent {
 
   @override
   List<Object> get props => [author];
+
 }

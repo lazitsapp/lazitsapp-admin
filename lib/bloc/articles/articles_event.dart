@@ -26,6 +26,12 @@ class LoadArticlesSuccess extends ArticlesEvent {
 }
 
 class LoadArticlesError extends ArticlesEvent {
+
+  final String errorMessage;
+
+  const LoadArticlesError(this.errorMessage);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [errorMessage];
+
 }

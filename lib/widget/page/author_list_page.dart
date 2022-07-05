@@ -48,16 +48,20 @@ class AuthorListPageData extends StatelessWidget {
 
         if (state is AuthorsLoadingState) {
           return const Text('loading');
-        } else if (state.authors.isNotEmpty) {
+        }
+
+        if (state is AuthorsLoadedState) {
+          debugPrint(state.authors.toString());
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: AuthorList(state.authors),
           );
-        } else {
-          return const Text('No authors to display');
         }
 
+        return const Text('No authors to display');
+
       }
+
     );
 
   }

@@ -4,6 +4,7 @@ import 'package:lazitsapp_admin/router/app_page.dart';
 import 'package:lazitsapp_admin/widget/page/page.dart';
 
 import '../bloc/auth/auth_bloc.dart';
+import '../widget/page/category_create_page.dart';
 
 class AppRouter {
 
@@ -71,15 +72,14 @@ class AppRouter {
             path: AppPage.categoryUpdate.path,
             name: AppPage.categoryUpdate.name,
             builder: (context, state) {
-              final String categoryId
-              = state.params['categoryId']!;
+              final String categoryId = state.params['categoryId']!;
               return CategoryUpdatePage(categoryId);
             }
           ),
           GoRoute(
             path: AppPage.categoryCreate.path,
             name: AppPage.categoryCreate.name,
-            builder: (context, state) => const AuthorCreatePage()
+            builder: (context, state) => const CategoryCreatePage()
           )
         ]
       ),

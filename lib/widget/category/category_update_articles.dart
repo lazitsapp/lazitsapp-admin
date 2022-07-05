@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class CategoryUpdateArticles extends StatelessWidget {
 
-  final ArticleCategory articleCategory;
+  final Category articleCategory;
 
   const CategoryUpdateArticles(
     this.articleCategory,
@@ -18,14 +18,16 @@ class CategoryUpdateArticles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+    return Container();
 
-    return BlocProvider<ArticlesBloc>(
-      create: (BuildContext context) => ArticlesBloc(
-        FirebaseArticleRepository(firebaseProvider.firebaseFirestore)
-      )..add(LoadArticles(articleCategory.id)),
-      child: const CategoryDetailArticleDataProvider()
-    );
+    // FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+    //
+    // return BlocProvider<ArticlesBloc>(
+    //   create: (BuildContext context) => ArticlesBloc(
+    //     FirebaseArticleRepository(firebaseProvider.firebaseFirestore)
+    //   )..add(LoadArticles(articleCategory.categoryId)),
+    //   child: const CategoryDetailArticleDataProvider()
+    // );
 
   }
 

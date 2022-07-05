@@ -13,7 +13,7 @@ class LoadCategories extends CategoriesEvent {
 }
 
 class LoadCategoriesSuccess extends CategoriesEvent {
-  final List<ArticleCategory> categories;
+  final List<Category> categories;
   const LoadCategoriesSuccess(this.categories);
 
   @override

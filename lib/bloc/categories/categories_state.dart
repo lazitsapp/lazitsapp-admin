@@ -2,7 +2,7 @@ part of 'categories_bloc.dart';
 
 abstract class CategoriesState extends Equatable {
 
-  final List<ArticleCategory> categories;
+  final List<Category> categories;
 
   const CategoriesState(this.categories);
 
@@ -19,7 +19,7 @@ class CategoriesLoadingState extends CategoriesState {
 }
 
 class CategoriesLoadedState extends CategoriesState {
-  const CategoriesLoadedState(List<ArticleCategory> categories) : super(categories);
+  const CategoriesLoadedState(List<Category> categories) : super(categories);
 }
 
 class CategoriesLoadingErrorState extends CategoriesState {

@@ -12,40 +12,72 @@ class LoadCategory extends CategoryEvent {
 
   @override
   List<Object> get props => [categoryId];
+
 }
 
-class LoadCategorySuccess extends CategoryEvent {
-  final ArticleCategory category;
-  const LoadCategorySuccess(this.category);
+class CreateCategory extends CategoryEvent {
+
+  final String name;
+  final CategoryType categoryType;
+  final int priority;
+  final String shortDescription;
+  final bool isActive;
+
+  const CreateCategory({
+    required this.name,
+    required this.categoryType,
+    required this.priority,
+    required this.shortDescription,
+    required this.isActive,
+  });
 
   @override
-  List<Object> get props => [category];
+  List<Object> get props => [
+    name,
+    categoryType,
+    priority,
+    shortDescription,
+    isActive,
+  ];
 
-  @override
-  String toString() => 'LoadCategorySuccess { category: $category }';
-}
-
-class LoadCategoryError extends CategoryEvent {
-  @override
-  List<Object> get props => [];
 }
 
 class UpdateCategory extends CategoryEvent {
 
-  final ArticleCategory articleCategory;
+  final String articleId;
+  final String name;
+  final CategoryType categoryType;
+  final int priority;
+  final String shortDescription;
+  final bool isActive;
 
-  const UpdateCategory(this.articleCategory);
+  const UpdateCategory({
+    required this.articleId,
+    required this.name,
+    required this.categoryType,
+    required this.priority,
+    required this.shortDescription,
+    required this.isActive,
+  });
+
+  @override
+  List<Object> get props => [
+    articleId,
+    name,
+    categoryType,
+    priority,
+    shortDescription,
+    isActive,
+  ];
+}
+
+class DeleteCategory extends CategoryEvent {
+
+  final Category articleCategory;
+
+  const DeleteCategory(this.articleCategory);
 
   @override
   List<Object> get props => [articleCategory];
-}
 
-class UpdateCategorySuccess extends CategoryEvent {
-  @override
-  List<Object> get props => [];
-}
-
-class UpdateCategoryError extends CategoryEvent {
-  @override
-  List<Object> get props => [];
 }

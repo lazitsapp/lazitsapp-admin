@@ -1,26 +1,36 @@
 part of 'articles_bloc.dart';
 
 abstract class ArticlesState extends Equatable {
-  final List<Article> articles;
-
-  const ArticlesState(this.articles);
-
-  @override
-  List<Object> get props => [articles];
+  const ArticlesState();
 }
 
 class ArticlesInitialState extends ArticlesState {
-  const ArticlesInitialState() : super(const []);
+  const ArticlesInitialState();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class ArticlesLoadingState extends ArticlesState {
-  const ArticlesLoadingState() : super(const []);
+  @override
+  List<Object?> get props => [];
 }
 
 class ArticlesLoadedState extends ArticlesState {
-  const ArticlesLoadedState(List<Article> articles) : super(articles);
+  final List<Article> articles;
+
+  const ArticlesLoadedState(this.articles);
+
+  @override
+  List<Object?> get props => [articles];
 }
 
 class ArticlesLoadingErrorState extends ArticlesState {
-  const ArticlesLoadingErrorState() : super(const []);
+
+  final String errorMessage;
+
+  const ArticlesLoadingErrorState(this.errorMessage);
+
+  @override
+  List<Object?> get props => [errorMessage];
 }

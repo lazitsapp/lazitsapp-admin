@@ -9,13 +9,27 @@ class ArticlesBloc extends Bloc<ArticlesEvent, ArticlesState> {
 
   final ArticleRepository _articleRepository;
 
-  ArticlesBloc(ArticleRepository articleRepository) :
+  ArticlesBloc({
+    required ArticleRepository articleRepository
+  }) :
     _articleRepository = articleRepository,
     super(const ArticlesInitialState()) {
 
+    on<LoadArticles>(_onLoadArticles);
+  }
 
-      _articleRepository.toString();
+  void _onLoadArticles(LoadArticles event, emit) async {
+    emit(ArticlesLoadingState());
+
+    try {
+      List<Article> articles =
+      await _articleRepository.getArticles(categoryId: event.categoryId);
+      emit(ArticlesLoadedState(articles));
+    } catch (err) {
+      emit(LoadArticlesError(err.toString()));
+    }
 
   }
 
 }
+

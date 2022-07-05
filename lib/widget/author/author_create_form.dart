@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:author_repository/author_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -103,7 +102,7 @@ class _AuthorCreateFormState extends State<AuthorCreateForm> {
 
                     const SizedBox(height: 16),
 
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () => onCreate(context),

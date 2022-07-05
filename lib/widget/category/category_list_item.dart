@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 class CategoryListItem extends StatelessWidget {
 
-  final ArticleCategory articleCategory;
+  final Category articleCategory;
 
   const CategoryListItem(this.articleCategory, {Key? key}) : super(key: key);
 
@@ -12,7 +12,7 @@ class CategoryListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       child: Text(articleCategory.name),
-      onPressed: () => GoRouter.of(context).go('/categories/update/${articleCategory.id}'),
+      onPressed: () => GoRouter.of(context).go('/categories/update/${articleCategory.categoryId}'),
     );
   }
 
