@@ -1,5 +1,5 @@
-import 'package:article_repository/article_repository.dart';
-import 'package:category_repository/category_repository.dart';
+import 'dart:ui';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -49,12 +49,16 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     await _categoryRepository.update(articleCategory);
 
     emit(CategoryLoadedState(articleCategory));
+
+    if (event.onCompleted != null) {
+      event.onCompleted!();
+    }
   }
 
   void _onCreateCategory(CreateCategory event, emit) {
-    emit(CategoryLoadingState());
+    emit(CategoryCreatingState());
 
-    Category articleCategory = Category(
+    Category category = Category(
       categoryId: Category.generateId(),
       name: event.name,
       shortDescription: event.shortDescription,
@@ -63,9 +67,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       isActive: event.isActive,
     );
 
-    _categoryRepository.create(articleCategory);
+    _categoryRepository.create(category);
 
-    emit(CategoryLoadedState(articleCategory));
+    emit(CategoryInitialState());
+
+    if (event.onCompleted != null) {
+      event.onCompleted!();
+    }
   }
 
   void _onDeleteCategory(DeleteCategory event, emit) async {
@@ -74,15 +82,21 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       emit(CategoryLoadingState());
 
       List<Article> categoryArticles = await _articleRepository.getArticles(
-        categoryId: event.articleCategory.categoryId,
-        limit: 1,
+        ArticleQueryOptions(
+          categoryId: event.category.categoryId,
+          limit: 1,
+        )
       );
 
       bool hasArticles = categoryArticles.isNotEmpty;
       if (hasArticles) {
-        throw Exception('Cannot delete author ${event.articleCategory.categoryId} still having articles associated!');
+        throw Exception('Cannot delete author ${event.category.categoryId} still having articles associated!');
       } else {
-        await _categoryRepository.delete(event.articleCategory);
+        await _categoryRepository.delete(event.category);
+      }
+
+      if (event.onCompleted != null) {
+        event.onCompleted!();
       }
 
     } catch (err) {

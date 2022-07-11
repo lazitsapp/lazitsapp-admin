@@ -6,9 +6,11 @@ abstract class ArticlesEvent extends Equatable {
 
 class LoadArticles extends ArticlesEvent {
 
-  final String categoryId;
+  final String? categoryId;
 
-  const LoadArticles(this.categoryId);
+  const LoadArticles({
+    this.categoryId
+  });
 
   @override
   List<Object> get props => [];

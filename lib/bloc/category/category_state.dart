@@ -14,6 +14,21 @@ class CategoryLoadingState extends CategoryState {
   List<Object> get props => [];
 }
 
+class CategoryCreatingState extends CategoryState {
+  @override
+  List<Object> get props => [];
+}
+
+class CategoryUpdatingState extends CategoryState {
+  @override
+  List<Object> get props => [];
+}
+
+class CategoryDeleting extends CategoryState {
+  @override
+  List<Object> get props => [];
+}
+
 class CategoryLoadedState extends CategoryState {
 
   final Category category;

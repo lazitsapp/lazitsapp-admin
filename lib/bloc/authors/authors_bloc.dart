@@ -1,6 +1,6 @@
-import 'package:author_repository/author_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 part 'authors_event.dart';
 part 'authors_state.dart';

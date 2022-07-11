@@ -1,4 +1,4 @@
-import 'package:category_repository/category_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -43,11 +43,15 @@ class _CategoryUpdateFormState extends State<CategoryUpdateForm> {
   void onDelete(BuildContext context) {
     showAlertDialog(
       title: 'Delete Category',
-      content: 'Are you sure you want to delete the author?',
+      content: 'Are you sure you want to delete the category?',
       context: context,
       onAccept: () {
-        BlocProvider.of<CategoryBloc>(context).add(DeleteCategory(widget.category));
-        Navigator.of(context, rootNavigator: true).pop();
+        BlocProvider.of<CategoryBloc>(context).add(
+          DeleteCategory(
+            category: widget.category,
+            onCompleted: () => Navigator.of(context, rootNavigator: true).pop()
+          )
+        );
       },
       acceptButtonText: 'Delete Category',
     );

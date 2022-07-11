@@ -1,7 +1,9 @@
-import 'package:article_repository/article_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:lazitsapp_admin/widget/util/form_builder_author_selector.dart';
+import 'package:lazitsapp_admin/widget/util/form_builder_category_selector.dart';
 
 class ArticleUpdateForm extends StatefulWidget {
 
@@ -45,20 +47,6 @@ class _ArticleUpdateFormState extends State<ArticleUpdateForm> {
               ),
 
               FormBuilderTextField(
-                name: 'playCount',
-                decoration: const InputDecoration(labelText: 'Play count'),
-                readOnly: true,
-                initialValue: article.playCount.toString(),
-              ),
-
-              FormBuilderTextField(
-                name: 'mediaResourceUrl',
-                decoration: const InputDecoration(labelText: 'Media resource url'),
-                readOnly: true,
-                initialValue: article.mediaResourceUrl,
-              ),
-
-              FormBuilderTextField(
                 name: 'name',
                 decoration: const InputDecoration(labelText: 'Name'),
                 initialValue: article.name,
@@ -67,6 +55,26 @@ class _ArticleUpdateFormState extends State<ArticleUpdateForm> {
                 ]),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
+              ),
+
+              FormBuilderDropdown<ArticleType>(
+                name: 'articleCategoryType',
+                decoration: const InputDecoration(labelText: 'Type'),
+                initialValue: article.articleType,
+                items: ArticleType.values.map((type) {
+                  return DropdownMenuItem<ArticleType>(
+                      value: type,
+                      child: Text(type.toString())
+                  );
+                }).toList(),
+              ),
+
+              FormBuilderAuthorSelector(
+                initialValue: article.author,
+              ),
+
+              FormBuilderCategorySelector(
+                initialValue: article.category,
               ),
 
               FormBuilderTextField(
@@ -80,16 +88,19 @@ class _ArticleUpdateFormState extends State<ArticleUpdateForm> {
                 textInputAction: TextInputAction.next,
               ),
 
-              FormBuilderDropdown<ArticleType>(
-                name: 'articleCategoryType',
-                initialValue: article.articleType,
-                items: ArticleType.values.map((type) {
-                  return DropdownMenuItem<ArticleType>(
-                      value: type,
-                      child: Text(type.toString())
-                  );
-                }).toList(),
-              )
+              FormBuilderTextField(
+                name: 'playCount',
+                decoration: const InputDecoration(labelText: 'Play count'),
+                readOnly: true,
+                initialValue: article.playCount.toString(),
+              ),
+
+              FormBuilderTextField(
+                name: 'mediaResourceUrl',
+                decoration: const InputDecoration(labelText: 'Media resource url'),
+                readOnly: true,
+                initialValue: article.mediaResourceUrl,
+              ),
 
             ],
           )

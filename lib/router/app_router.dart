@@ -4,7 +4,6 @@ import 'package:lazitsapp_admin/router/app_page.dart';
 import 'package:lazitsapp_admin/widget/page/page.dart';
 
 import '../bloc/auth/auth_bloc.dart';
-import '../widget/page/category_create_page.dart';
 
 class AppRouter {
 
@@ -43,7 +42,7 @@ class AppRouter {
       GoRoute(
         path: AppPage.authorList.path,
         name: AppPage.authorList.name,
-        builder: (context, state) => const AuthorListPage(),
+        builder: (context, state) => AuthorListPage(key: UniqueKey()),
         routes: [
           GoRoute(
             path: AppPage.authorUpdate.path,
@@ -66,7 +65,7 @@ class AppRouter {
       GoRoute(
         path: AppPage.categoryList.path,
         name: AppPage.categoryList.name,
-        builder: (context, state) => const CategoryListPage(),
+        builder: (context, state) => CategoryListPage(key: UniqueKey()),
         routes: [
           GoRoute(
             path: AppPage.categoryUpdate.path,
@@ -85,7 +84,26 @@ class AppRouter {
       ),
 
       // Article
-
+      GoRoute(
+        path: AppPage.articleList.path,
+        name: AppPage.articleList.name,
+        builder: (context, state) => const ArticleListPage(),
+        routes: [
+          GoRoute(
+            path: AppPage.articleUpdate.path,
+            name: AppPage.articleUpdate.name,
+            builder: (context, state) {
+              final String articleId = state.params['articleId']!;
+              return ArticleUpdatePage(articleId);
+            }
+          ),
+          GoRoute(
+            path: AppPage.articleCreate.path,
+            name: AppPage.articleCreate.name,
+            builder: (context, state) => const ArticleCreatePage()
+          )
+        ]
+      ),
 
     ],
 

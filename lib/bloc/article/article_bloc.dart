@@ -1,4 +1,4 @@
-import 'package:article_repository/article_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 

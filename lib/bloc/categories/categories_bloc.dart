@@ -1,4 +1,4 @@
-import 'package:category_repository/category_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,8 +9,8 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
 
   final CategoryRepository _categoryRepository;
 
-  CategoriesBloc(CategoryRepository articleRepository) :
-    _categoryRepository = articleRepository,
+  CategoriesBloc(CategoryRepository categoryRepository) :
+    _categoryRepository = categoryRepository,
     super(const CategoriesInitialState()) {
 
     on<LoadCategories>(_onLoadCategories);

@@ -1,5 +1,3 @@
-import 'package:article_repository/article_repository.dart';
-import 'package:author_repository/author_repository.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +5,7 @@ import 'package:lazitsapp_admin/bloc/author/author_bloc.dart';
 import 'package:lazitsapp_admin/widget/author/author_update_form.dart';
 import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 import 'package:provider/provider.dart';
-import 'package:storage_repository/storage_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 class AuthorUpdatePage extends StatelessWidget {
 
@@ -22,9 +20,9 @@ class AuthorUpdatePage extends StatelessWidget {
 
     return BlocProvider<AuthorBloc>(
       create: (BuildContext context) => AuthorBloc(
-        FirebaseAuthorRepository(firebaseProvider.firebaseFirestore),
-        FirebaseArticleRepository(firebaseProvider.firebaseFirestore),
-        FirebaseStorageRepository(firebaseProvider.firebaseStorage)
+        FirebaseAuthorRepository(firebaseProvider.firestore),
+        FirebaseArticleRepository(firebaseProvider.firestore),
+        FirebaseStorageRepository(firebaseProvider.storage)
       )..add(LoadAuthor(authorId)),
       child: const DefaultAppScaffolding(
         body: AuthorUpdatePageDataProvider()

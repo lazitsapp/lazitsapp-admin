@@ -22,6 +22,7 @@ class CreateCategory extends CategoryEvent {
   final int priority;
   final String shortDescription;
   final bool isActive;
+  final VoidCallback? onCompleted;
 
   const CreateCategory({
     required this.name,
@@ -29,6 +30,7 @@ class CreateCategory extends CategoryEvent {
     required this.priority,
     required this.shortDescription,
     required this.isActive,
+    this.onCompleted,
   });
 
   @override
@@ -50,6 +52,7 @@ class UpdateCategory extends CategoryEvent {
   final int priority;
   final String shortDescription;
   final bool isActive;
+  final VoidCallback? onCompleted;
 
   const UpdateCategory({
     required this.articleId,
@@ -58,6 +61,7 @@ class UpdateCategory extends CategoryEvent {
     required this.priority,
     required this.shortDescription,
     required this.isActive,
+    this.onCompleted,
   });
 
   @override
@@ -73,11 +77,15 @@ class UpdateCategory extends CategoryEvent {
 
 class DeleteCategory extends CategoryEvent {
 
-  final Category articleCategory;
+  final Category category;
+  final VoidCallback? onCompleted;
 
-  const DeleteCategory(this.articleCategory);
+  const DeleteCategory({
+    required this.category,
+    this.onCompleted,
+  });
 
   @override
-  List<Object> get props => [articleCategory];
+  List<Object> get props => [category];
 
 }

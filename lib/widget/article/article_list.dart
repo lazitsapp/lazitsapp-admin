@@ -1,6 +1,6 @@
-import 'package:article_repository/article_repository.dart';
 import 'package:flutter/material.dart';
 import './article_card.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 class ArticlesList extends StatelessWidget {
 
@@ -11,7 +11,8 @@ class ArticlesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      Row(
+      Wrap(
+        runSpacing: 8.0,
         children: articles.map((article) {
           return Container(
             width: 200,

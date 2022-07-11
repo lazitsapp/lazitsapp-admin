@@ -1,4 +1,4 @@
-import 'package:article_repository/article_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -22,8 +22,14 @@ class ArticlesBloc extends Bloc<ArticlesEvent, ArticlesState> {
     emit(ArticlesLoadingState());
 
     try {
+
+      ArticleQueryOptions queryOptions = ArticleQueryOptions(
+        categoryId: event.categoryId,
+      );
+
       List<Article> articles =
-      await _articleRepository.getArticles(categoryId: event.categoryId);
+        await _articleRepository.getArticles(queryOptions);
+
       emit(ArticlesLoadedState(articles));
     } catch (err) {
       emit(LoadArticlesError(err.toString()));

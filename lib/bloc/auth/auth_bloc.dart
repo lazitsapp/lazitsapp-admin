@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:profile_repository/profile_repository.dart';
+import 'package:lazitsapp_auth/lazitsapp_auth.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -81,7 +81,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       bool isFirstTime = isFirstSignin(signinResult);
       if (isFirstTime) {
-        await _profileRepository.createProfile(signinResult.user.toProfile());
+        Profile profile = Profile(
+          profileId: signinResult.user.uid,
+          displayName: signinResult.user.displayName ?? '',
+          email: signinResult.user.email ?? '',
+          photoURL: signinResult.user.photoUrl ?? '',
+          signupDate: DateTime.now(),
+        );
+        await _profileRepository.createProfile(profile);
       }
 
       isSigningIn = false;
@@ -117,7 +124,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       bool isFirstTime = isFirstSignin(signinResult);
       if (isFirstTime) {
-        await _profileRepository.createProfile(signinResult.user.toProfile());
+        Profile profile = Profile(
+          profileId: signinResult.user.uid,
+          displayName: signinResult.user.displayName ?? '',
+          email: signinResult.user.email ?? '',
+          photoURL: signinResult.user.photoUrl ?? '',
+          signupDate: DateTime.now(),
+        );
+
+        await _profileRepository.createProfile(profile);
       }
 
       isSigningIn = false;

@@ -1,4 +1,4 @@
-import 'package:category_repository/category_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,35 +13,43 @@ class CategoryListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
 
     return BlocProvider<CategoriesBloc>(
-      create: (BuildContext context) => CategoriesBloc(
-        FirebaseCategoryRepository(firebaseProvider.firebaseFirestore)
+      create: (BuildContext context) =>
+      CategoriesBloc(
+        FirebaseCategoryRepository(firebaseProvider.firestore)
       )..add(const LoadCategories()),
-      child: DefaultAppScaffolding(
-        body: const CategoryListPageDataProvider(),
-        floatingActionButton: FloatingActionButton.large(
-          child: const Icon(Icons.add),
-          onPressed: () => GoRouter.of(context).go('/categories/create'),
-        ),
-      )
+      child: const CategoryListPageScaffold()
     );
-
   }
 
 }
 
-class CategoryListPageDataProvider extends StatelessWidget {
-  const CategoryListPageDataProvider({Key? key}) : super(key: key);
+class CategoryListPageScaffold extends StatelessWidget {
+  const CategoryListPageScaffold({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return DefaultAppScaffolding(
+      body: const CategoryListPageBody(),
+      floatingActionButton: FloatingActionButton.large(
+        child: const Icon(Icons.add),
+        onPressed: () => GoRouter.of(context).go('/categories/create'),
+      ),
+    );
+  }
 
+}
+
+
+class CategoryListPageBody extends StatelessWidget {
+  const CategoryListPageBody({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<CategoriesBloc, CategoriesState>(
       builder: (context, state) {
-
         if (state is CategoriesLoadingState) {
           return const Text('loading');
         }
@@ -49,12 +57,17 @@ class CategoryListPageDataProvider extends StatelessWidget {
         if (state is CategoriesLoadedState) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: CategoryList(state.categories),
+            child: Column(
+              children: [
+                Text('Categories', style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: 8),
+                CategoryList(state.categories)
+              ]
+            ),
           );
         }
 
         return const Text('No authors to display');
-
       },
     );
   }

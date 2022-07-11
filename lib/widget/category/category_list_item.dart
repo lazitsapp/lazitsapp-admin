@@ -1,4 +1,4 @@
-import 'package:category_repository/category_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

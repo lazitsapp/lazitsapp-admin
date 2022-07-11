@@ -1,4 +1,3 @@
-import 'package:author_repository/author_repository.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:lazitsapp_admin/router/router.dart';
 import 'package:lazitsapp_admin/widget/author/author_list.dart';
 import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 import 'package:provider/provider.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 class AuthorListPage extends StatelessWidget {
 
@@ -20,7 +20,7 @@ class AuthorListPage extends StatelessWidget {
 
     return BlocProvider<AuthorsBloc>(
       create: (BuildContext context) => AuthorsBloc(
-        FirebaseAuthorRepository(firebaseProvider.firebaseFirestore)
+        FirebaseAuthorRepository(firebaseProvider.firestore)
       )..add(const LoadAuthors()),
       child: DefaultAppScaffolding(
         title: AppPage.authorList.title,

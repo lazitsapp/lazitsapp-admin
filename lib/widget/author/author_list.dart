@@ -1,4 +1,4 @@
-import 'package:author_repository/author_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:lazitsapp_admin/widget/author/author_list_item.dart';
 import 'package:lazitsapp_admin/widget/util/intersperse.dart';

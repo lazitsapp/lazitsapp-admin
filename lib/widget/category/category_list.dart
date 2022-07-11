@@ -1,4 +1,4 @@
-import 'package:category_repository/category_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import './category_list_item.dart';
 
@@ -18,8 +18,6 @@ class CategoryList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Categories', style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: categories.map((category) => CategoryListItem(category)).toList()

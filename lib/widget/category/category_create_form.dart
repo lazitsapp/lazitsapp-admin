@@ -1,10 +1,10 @@
-import 'package:category_repository/category_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-
-import '../../bloc/category/category_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lazitsapp_admin/bloc/category/category_bloc.dart';
 
 class CategoryCreateForm extends StatefulWidget {
   const CategoryCreateForm({Key? key}) : super(key: key);
@@ -21,7 +21,6 @@ class _CategoryCreateFormState extends State<CategoryCreateForm> {
     FormBuilderState? formState = _formKey.currentState;
 
     if (formState != null && formState.saveAndValidate()) {
-
       Map<String, dynamic>? values = formState.value;
 
       BlocProvider.of<CategoryBloc>(context).add(
@@ -31,12 +30,13 @@ class _CategoryCreateFormState extends State<CategoryCreateForm> {
           shortDescription: values['shortDescription'],
           priority: values['priority'],
           isActive: values['isActive'],
-        ));
+          onCompleted: () => GoRouter.of(context).pop(),
+        )
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Creating...')),
       );
-
     }
   }
 
@@ -44,7 +44,6 @@ class _CategoryCreateFormState extends State<CategoryCreateForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         FormBuilder(
             key: _formKey,
             autovalidateMode: AutovalidateMode.disabled,
@@ -64,7 +63,8 @@ class _CategoryCreateFormState extends State<CategoryCreateForm> {
 
                 FormBuilderTextField(
                   name: 'shortDescription',
-                  decoration: const InputDecoration(labelText: 'Short description'),
+                  decoration: const InputDecoration(
+                      labelText: 'Short description'),
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
                   ]),
@@ -100,6 +100,7 @@ class _CategoryCreateFormState extends State<CategoryCreateForm> {
                 FormBuilderCheckbox(
                   name: 'isActive',
                   title: const Text('Active'),
+                  initialValue: false,
                 ),
 
                 const SizedBox(height: 16),

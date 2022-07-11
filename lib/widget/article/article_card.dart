@@ -1,7 +1,8 @@
-import 'package:article_repository/article_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import './article_card_length_badge.dart';
+import 'package:lazitsapp_admin/router/app_page.dart';
+import 'package:lazitsapp_admin/widget/article/article_card_length_badge.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 class ArticleCard extends StatelessWidget {
 
@@ -13,7 +14,12 @@ class ArticleCard extends StatelessWidget {
   ) : super(key: key);
 
   void _handleCardTap(BuildContext context) {
-    GoRouter.of(context).go('/articles/${article.id}');
+    GoRouter.of(context).goNamed(
+      AppPage.articleUpdate.name,
+      params: {
+        'articleId': article.id,
+      }
+    );
   }
 
   @override

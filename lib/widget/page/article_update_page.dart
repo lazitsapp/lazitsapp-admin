@@ -1,4 +1,4 @@
-import 'package:article_repository/article_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,18 +20,29 @@ class ArticleUpdatePage extends StatelessWidget {
 
     return BlocProvider<ArticleBloc>(
       create: (BuildContext context) => ArticleBloc(
-          FirebaseArticleRepository(firebaseProvider.firebaseFirestore)
+        FirebaseArticleRepository(firebaseProvider.firestore)
       )..add(LoadArticle(articleId)),
-      child: const DefaultAppScaffolding(
-          body: ArticleDetailPageDataProvider()
-      ),
+      child: const ArticleUpdatePageScaffolding(),
     );
   }
 }
 
-class ArticleDetailPageDataProvider extends StatelessWidget {
+class ArticleUpdatePageScaffolding extends StatelessWidget {
 
-  const ArticleDetailPageDataProvider({Key? key}) : super(key: key);
+  const ArticleUpdatePageScaffolding({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const DefaultAppScaffolding(
+      body: ArticleUpdatePageBody()
+    );
+  }
+
+}
+
+class ArticleUpdatePageBody extends StatelessWidget {
+
+  const ArticleUpdatePageBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +61,8 @@ class ArticleDetailPageDataProvider extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      'Edit Article',
-                      style: Theme.of(context).textTheme.headlineSmall
+                    'Edit Article',
+                    style: Theme.of(context).textTheme.headlineSmall
                   ),
                   ArticleUpdateForm(article),
                   // const Text('Articles in this category'),

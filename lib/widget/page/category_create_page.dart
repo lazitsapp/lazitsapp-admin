@@ -1,14 +1,13 @@
-import 'package:article_repository/article_repository.dart';
-import 'package:category_repository/category_repository.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazitsapp_admin/widget/category/category.dart';
 import 'package:provider/provider.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
-import '../../bloc/category/category_bloc.dart';
-import '../../router/app_page.dart';
-import '../default_app_scaffolding.dart';
+import 'package:lazitsapp_admin/bloc/category/category_bloc.dart';
+import 'package:lazitsapp_admin/router/app_page.dart';
+import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 
 class CategoryCreatePage extends StatelessWidget {
   const CategoryCreatePage({Key? key}) : super(key: key);
@@ -19,14 +18,14 @@ class CategoryCreatePage extends StatelessWidget {
     FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
 
     return BlocProvider<CategoryBloc>(
-        create: (BuildContext context) => CategoryBloc(
-          categoryRepository: FirebaseCategoryRepository(firebaseProvider.firebaseFirestore),
-          articleRepository: FirebaseArticleRepository(firebaseProvider.firebaseFirestore),
-        ),
-        child: DefaultAppScaffolding(
-          title: AppPage.categoryCreate.title,
-          body: const CategoryCreatePageDataProvider()
-        )
+      create: (BuildContext context) => CategoryBloc(
+        categoryRepository: FirebaseCategoryRepository(firebaseProvider.firestore),
+        articleRepository: FirebaseArticleRepository(firebaseProvider.firestore),
+      ),
+      child: DefaultAppScaffolding(
+        title: AppPage.categoryCreate.title,
+        body: const CategoryCreatePageDataProvider()
+      )
     );
 
   }

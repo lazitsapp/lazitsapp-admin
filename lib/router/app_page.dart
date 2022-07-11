@@ -8,7 +8,7 @@ enum AppPage {
   authorCreate,
   authorUpdate,
 
-  articles,
+  articleList,
   articleCreate,
   articleUpdate,
 
@@ -36,7 +36,7 @@ extension AppPageExtension on AppPage {
       case AppPage.authorUpdate:
         return "update/:authorId";
 
-      case AppPage.articles:
+      case AppPage.articleList:
         return "/articles";
       case AppPage.articleCreate:
         return "create";
@@ -72,7 +72,7 @@ extension AppPageExtension on AppPage {
       case AppPage.authorCreate:
         return "AUTHOR_CREATE";
 
-      case AppPage.articles:
+      case AppPage.articleList:
         return "ARTICLES_LIST";
       case AppPage.articleCreate:
         return "ARTICLE_UPDATE";
@@ -110,7 +110,7 @@ extension AppPageExtension on AppPage {
       case AppPage.authorUpdate:
         return "Lazíts! Admin - Update Author";
 
-      case AppPage.articles:
+      case AppPage.articleList:
         return "Lazíts! Admin - Article List";
       case AppPage.articleCreate:
         return "Lazíts! Admin - Create Article";

@@ -42,22 +42,26 @@ dependencies:
   flutter_form_builder: ^7.2.1
   form_builder_validators: ^8.1.1
 
-  article_repository:
-    path: lazitsapp-packages/article_repository
-  authentication_repository:
-    path: lazitsapp-packages/authentication_repository
-  author_repository:
-    path: lazitsapp-packages/author_repository
-  category_repository:
-    path: lazitsapp-packages/category_repository
+#  article_repository:
+#    path: lazitsapp-packages/article_repository
+  lazitsapp_auth:
+    path: lazitsapp-packages/lazitsapp_auth
+#  author_repository:
+#    path: lazitsapp-packages/author_repository
+#  category_repository:
+#    path: lazitsapp-packages/category_repository
   firebase_provider:
     path: lazitsapp-packages/firebase_provider
-  profile_repository:
-    path: lazitsapp-packages/profile_repository
-  session_repository:
-    path: lazitsapp-packages/session_repository
-  storage_repository:
-    path: lazitsapp-packages/storage_repository
+#  profile_repository:
+#    path: lazitsapp-packages/profile_repository
+#  session_repository:
+#    path: lazitsapp-packages/session_repository
+#  storage_repository:
+#    path: lazitsapp-packages/storage_repository
+  lazitsapp_repositories:
+    path: lazitsapp-packages/lazitsapp_repositories
+  lazitsapp_shared:
+    path: lazitsapp-packages/lazitsapp_shared
 
 
 dev_dependencies:

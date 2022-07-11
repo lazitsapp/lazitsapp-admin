@@ -1,4 +1,4 @@
-import 'package:article_repository/article_repository.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 
 class ArticlesListItem extends StatelessWidget {

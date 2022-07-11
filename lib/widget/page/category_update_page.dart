@@ -1,5 +1,3 @@
-import 'package:article_repository/article_repository.dart';
-import 'package:category_repository/category_repository.dart';
 import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +6,7 @@ import 'package:lazitsapp_admin/widget/article/article.dart';
 import 'package:lazitsapp_admin/widget/category/category.dart';
 import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 import 'package:provider/provider.dart';
+import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 
 import '../../bloc/articles/articles_bloc.dart';
 
@@ -27,19 +26,19 @@ class CategoryUpdatePage extends StatelessWidget {
         BlocProvider<CategoryBloc>(
           create: (context) => CategoryBloc(
             categoryRepository: FirebaseCategoryRepository(
-              firebaseProvider.firebaseFirestore
+              firebaseProvider.firestore
             ),
             articleRepository: FirebaseArticleRepository(
-              firebaseProvider.firebaseFirestore
+              firebaseProvider.firestore
             ),
           )..add(LoadCategory(categoryId)),
         ),
         BlocProvider<ArticlesBloc>(
           create: (context) => ArticlesBloc(
             articleRepository: FirebaseArticleRepository(
-              firebaseProvider.firebaseFirestore
+              firebaseProvider.firestore
             )
-          )..add(LoadArticles(categoryId)),
+          )..add(LoadArticles(categoryId: categoryId)),
         ),
       ],
       child: const DefaultAppScaffolding(
