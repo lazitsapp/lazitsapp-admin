@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lazitsapp_admin/router/app_page.dart';
 import 'package:lazitsapp_admin/widget/page/page.dart';
-
-import '../bloc/auth/auth_bloc.dart';
+import 'package:lazitsapp_shared/lazitsapp_shared.dart';
 
 class AppRouter {
 

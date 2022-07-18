@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lazitsapp_admin/bloc/auth/auth_bloc.dart';
 import 'package:lazitsapp_admin/router/router.dart';
+import 'package:lazitsapp_shared/lazitsapp_shared.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
