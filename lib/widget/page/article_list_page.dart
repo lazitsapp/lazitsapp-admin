@@ -7,7 +7,7 @@ import 'package:lazitsapp_admin/router/app_page.dart';
 import 'package:lazitsapp_admin/widget/article/article.dart';
 import 'package:lazitsapp_admin/widget/default_app_scaffolding.dart';
 import 'package:provider/provider.dart';
-import 'package:lazitsapp_admin/bloc/articles/articles_bloc.dart';
+import 'package:lazitsapp_shared/lazitsapp_shared.dart';
 
 class ArticleListPage extends StatelessWidget {
 

@@ -2,9 +2,9 @@ import 'package:firebase_provider/firebase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:lazitsapp_admin/bloc/categories/categories_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
+import 'package:lazitsapp_shared/lazitsapp_shared.dart';
 
 class FormBuilderCategorySelector extends StatelessWidget {
 

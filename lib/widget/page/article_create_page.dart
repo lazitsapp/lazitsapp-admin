@@ -5,7 +5,7 @@ import 'package:lazitsapp_admin/widget/article/article_create_form.dart';
 import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:provider/provider.dart';
 
-import '../../bloc/article/article_bloc.dart';
+import 'package:lazitsapp_shared/lazitsapp_shared.dart';
 import '../../router/app_page.dart';
 import '../default_app_scaffolding.dart';
 

@@ -8,7 +8,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lazitsapp_admin/widget/util/form_builder_author_selector.dart';
 import 'package:lazitsapp_admin/widget/util/form_builder_category_selector.dart';
 
-import '../../bloc/article/article_bloc.dart';
+import 'package:lazitsapp_shared/lazitsapp_shared.dart';
+// import '../../bloc/article/article_bloc.dart';
 
 class ArticleCreateForm extends StatefulWidget {
 

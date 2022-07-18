@@ -4,8 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lazitsapp_admin/widget/app.dart';
 import 'firebase_options.dart';
 
-bool _useEmulator = false;
-
 void main() async {
 
   await Firebase.initializeApp(
@@ -14,9 +12,8 @@ void main() async {
 
   FirebaseProvider firebaseProvider = FirebaseProvider();
   const bool useLocalFirestore = bool.fromEnvironment('USE_LOCAL_FIREBASE');
-  if (useLocalFirestore && _useEmulator == false) {
+  if (useLocalFirestore) {
     await firebaseProvider.useEmulator();
-    _useEmulator = true;
   }
 
   runApp(LazitsAppAdmin(firebaseProvider));
