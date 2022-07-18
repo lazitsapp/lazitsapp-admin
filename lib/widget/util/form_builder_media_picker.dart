@@ -4,15 +4,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:lazitsapp_admin/service/file_picker_service.dart';
 
-class FormBuilderImagePicker extends FormBuilderField<Uint8List> {
+class FormBuilderMediaPicker extends FormBuilderField<Uint8List> {
 
   final String? initialImageUrl;
   final String labelText;
   final String buttonText;
 
-  FormBuilderImagePicker({
+  FormBuilderMediaPicker({
     Key? key,
 
     this.initialImageUrl,
@@ -30,6 +29,7 @@ class FormBuilderImagePicker extends FormBuilderField<Uint8List> {
     ValueChanged<Uint8List?>? onChanged,
     ValueTransformer<Uint8List?>? valueTransformer,
     VoidCallback? onReset,
+
   }) : super(
     key: key,
     initialValue: initialValue,
@@ -44,14 +44,14 @@ class FormBuilderImagePicker extends FormBuilderField<Uint8List> {
     decoration: decoration,
     focusNode: focusNode,
     builder: (FormFieldState<Uint8List?> field) {
-      final state = field as FormBuilderImagePickerState;
+      final state = field as FormBuilderMediaPickerState;
       final widget = state.widget;
 
       return InputDecorator(
         decoration: state.decoration.copyWith(
           border: InputBorder.none,
         ),
-        child: ImagePickerWidget(
+        child: MediaPickerWidget(
             initialImageUrl: widget.initialImageUrl,
             labelText: widget.labelText,
             buttonText: widget.buttonText,
@@ -64,22 +64,21 @@ class FormBuilderImagePicker extends FormBuilderField<Uint8List> {
   );
 
   @override
-  FormBuilderImagePickerState createState() => FormBuilderImagePickerState();
+  FormBuilderMediaPickerState createState() => FormBuilderMediaPickerState();
+
 }
 
-class FormBuilderImagePickerState
-    extends FormBuilderFieldState<FormBuilderImagePicker, Uint8List> {}
+class FormBuilderMediaPickerState
+  extends FormBuilderFieldState<FormBuilderMediaPicker, Uint8List> {}
 
-
-class ImagePickerWidget extends StatefulWidget {
-
+class MediaPickerWidget extends StatefulWidget {
   final String labelText;
   final String buttonText;
   final String? initialImageUrl;
   final FormFieldValidator<String?>? validator;
   final void Function(Uint8List)? onImageSelected;
 
-  const ImagePickerWidget({
+  const MediaPickerWidget({
     Key? key,
     this.validator,
     this.initialImageUrl,
@@ -89,18 +88,16 @@ class ImagePickerWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
+  State<MediaPickerWidget> createState() => _MediaPickerWidgetState();
 }
 
-class _ImagePickerWidgetState extends State<ImagePickerWidget> {
+class _MediaPickerWidgetState extends State<MediaPickerWidget> {
 
   PlatformFile? selectedFile;
   bool hasInitialValue = false;
   bool hasSelectedImage = false;
-  FilePickerService filePickerService = FilePickerService();
   final TextEditingController textEditingController =
-    TextEditingController();
-
+  TextEditingController();
 
   @override
   void initState() {
@@ -116,12 +113,15 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     super.initState();
   }
 
+
+
   void _selectFile() async {
     List<PlatformFile>? pickedFiles;
     try {
 
       FilePickerResult? pickResult = await FilePicker.platform.pickFiles(
-        type: FileType.image,
+        // type: FileType.audio,
+        allowedExtensions: ['mp3'],
         allowMultiple: false,
         withData: true,
       );
@@ -181,44 +181,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             )
           ],
         ),
-        const SizedBox(height: 16),
-        buildCurrentImageDisplay(),
       ],
     );
-  }
-
-  Widget buildCurrentImageDisplay() {
-
-    Widget image;
-
-    if (hasInitialValue && hasSelectedImage == false) {
-      image = Image(
-          image: NetworkImage(widget.initialImageUrl!)
-      );
-    } else if (hasSelectedImage) {
-      Uint8List bytes = selectedFile!.bytes!;
-      image = Image.memory(bytes);
-    } else {
-      image = Container(
-        width: 200,
-        height: 200,
-        color: Colors.purpleAccent,
-      );
-    }
-
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 1),
-        color: Colors.grey.shade400,
-      ),
-      padding: const EdgeInsets.all(32.0),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints.tightFor(width: 200),
-        child: image
-      ),
-    );
-
   }
 
   void _logException(String message) {
@@ -230,4 +194,5 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     //   ),
     // );
   }
+
 }

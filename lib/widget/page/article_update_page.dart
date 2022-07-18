@@ -20,7 +20,8 @@ class ArticleUpdatePage extends StatelessWidget {
 
     return BlocProvider<ArticleBloc>(
       create: (BuildContext context) => ArticleBloc(
-        FirebaseArticleRepository(firebaseProvider.firestore)
+        articleRepository: FirebaseArticleRepository(firebaseProvider.firestore),
+        storageRepository: FirebaseStorageRepository(firebaseProvider.storage),
       )..add(LoadArticle(articleId)),
       child: const ArticleUpdatePageScaffolding(),
     );
@@ -55,19 +56,24 @@ class ArticleUpdatePageBody extends StatelessWidget {
           if (state is ArticleLoadingState) {
             return const Text('loading');
           } else if (article != null) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Edit Article',
-                    style: Theme.of(context).textTheme.headlineSmall
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints.tightFor(width: 512),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Edit Article',
+                        style: Theme.of(context).textTheme.headlineSmall
+                      ),
+                      ArticleUpdateForm(article),
+                      // const Text('Articles in this category'),
+                      // CategoryDetailArticles(articleCategory),
+                    ],
                   ),
-                  ArticleUpdateForm(article),
-                  // const Text('Articles in this category'),
-                  // CategoryDetailArticles(articleCategory),
-                ],
+                ),
               ),
             );
           } else {

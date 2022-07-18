@@ -18,26 +18,6 @@ class LoadArticle extends ArticleEvent {
 
 }
 
-class LoadArticleSuccess extends ArticleEvent {
-
-  final Article article;
-
-  const LoadArticleSuccess(this.article);
-
-  @override
-  List<Object> get props => [article];
-
-  @override
-  String toString() => 'LoadCategorySuccess { category: $article }';
-}
-
-class LoadArticleError extends ArticleEvent {
-
-  @override
-  List<Object> get props => [];
-
-}
-
 class UpdateArticle extends ArticleEvent {
 
   final Article article;
@@ -48,12 +28,24 @@ class UpdateArticle extends ArticleEvent {
   List<Object> get props => [article];
 }
 
-class UpdateArticleSuccess extends ArticleEvent {
+class CreateArticle extends ArticleEvent {
+
+  final Uint8List mediaBytes;
+
+  const CreateArticle({
+    required this.mediaBytes
+  });
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [mediaBytes];
+
 }
 
-class UpdateArticleError extends ArticleEvent {
+class DeleteArticle extends ArticleEvent {
+
+  const DeleteArticle();
+
   @override
   List<Object> get props => [];
+
 }

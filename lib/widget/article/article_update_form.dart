@@ -1,3 +1,4 @@
+import 'package:lazitsapp_admin/widget/util/util.dart';
 import 'package:lazitsapp_repositories/lazitsapp_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -31,6 +32,7 @@ class _ArticleUpdateFormState extends State<ArticleUpdateForm> {
 
     return Column(
       children: [
+
         FormBuilder(
           key: _formKey,
           autovalidateMode: AutovalidateMode.disabled,
@@ -89,18 +91,37 @@ class _ArticleUpdateFormState extends State<ArticleUpdateForm> {
               ),
 
               FormBuilderTextField(
+                name: 'mediaResourceUrl',
+                decoration: const InputDecoration(labelText: 'Media resource url'),
+                readOnly: true,
+                initialValue: article.mediaResourceUrl,
+              ),
+
+              FormBuilderImagePicker(
+                name: 'thumbnailImage',
+                labelText: 'Thumbnail image',
+                initialImageUrl: article.getCoverImageUrl(ArticleImageVersion.thumbnail),
+              ),
+
+              FormBuilderImagePicker(
+                name: 'squareImage',
+                labelText: 'Square image',
+                initialImageUrl: article.getCoverImageUrl(ArticleImageVersion.square),
+              ),
+
+              FormBuilderImagePicker(
+                name: 'portraitImage',
+                labelText: 'Portrait image',
+                initialImageUrl: article.getCoverImageUrl(ArticleImageVersion.portrait),
+              ),
+
+              FormBuilderTextField(
                 name: 'playCount',
                 decoration: const InputDecoration(labelText: 'Play count'),
                 readOnly: true,
                 initialValue: article.playCount.toString(),
               ),
 
-              FormBuilderTextField(
-                name: 'mediaResourceUrl',
-                decoration: const InputDecoration(labelText: 'Media resource url'),
-                readOnly: true,
-                initialValue: article.mediaResourceUrl,
-              ),
 
             ],
           )

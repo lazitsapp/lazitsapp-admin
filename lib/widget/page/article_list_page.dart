@@ -40,7 +40,7 @@ class ArticleListPageScaffold extends StatelessWidget {
       body: const ArticleListPageBody(),
       floatingActionButton: FloatingActionButton.large(
         child: const Icon(Icons.add),
-        onPressed: () => GoRouter.of(context).go(AppPage.articleCreate.path)
+        onPressed: () => GoRouter.of(context).goNamed(AppPage.articleCreate.name)
       )
     );
   }

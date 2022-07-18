@@ -52,8 +52,8 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
 
     if (imageBytes != null) {
       UploadTask uploadTask = _storageRepository.storeAuthorProfileImage(
-        author.authorId,
-        imageBytes,
+        authorId: author.authorId,
+        data: imageBytes,
       );
       await uploadTask.whenComplete(() => null);
 
@@ -85,8 +85,8 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
 
     // upload file
     UploadTask uploadTask = _storageRepository.storeAuthorProfileImage(
-      authorId,
-      event.imageBytes,
+      authorId: authorId,
+      data: event.imageBytes,
     );
     await uploadTask.whenComplete(() => null);
 
